@@ -44,4 +44,4 @@ docker buildx use mybuilder
 IMAGE_NAME=caprover/nginx-reverse-proxy
 IMAGE_VERSION=1-$GIT_COMMIT_HASH
 
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$IMAGE_VERSION -t $IMAGE_NAME:latest -f dockerfile-captain.release --push .
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$IMAGE_VERSION -t $IMAGE_NAME:latest -f Dockerfile --push .
