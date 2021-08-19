@@ -18,8 +18,6 @@ fi
 
 
 
-IMAGE_NAME=caprover/nginx-reverse-proxy
-
 
 # BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # On Github the line above does not work, instead:
@@ -35,8 +33,6 @@ git clean -fdx .
 
 GIT_COMMIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
 
-echo $GIT_COMMIT_HASH
-
 
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 export DOCKER_CLI_EXPERIMENTAL=enabled
@@ -45,4 +41,7 @@ docker buildx create --name mybuilder
 docker buildx use mybuilder
 
 
-# docker buildx build --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$CAPROVER_VERSION -t $IMAGE_NAME:latest -f dockerfile-captain.release --push .
+IMAGE_NAME=caprover/nginx-reverse-proxy
+IMAGE_VERSION=1-$GIT_COMMIT_HASH
+
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$IMAGE_VERSION -t $IMAGE_NAME:latest -f dockerfile-captain.release --push .
