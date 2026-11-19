@@ -1,12 +1,14 @@
 name: Build and push Docker image
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - master
 
 jobs:
     build-publish-docker-hub:
+        if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
         steps:
             - uses: azure/docker-login@v1
