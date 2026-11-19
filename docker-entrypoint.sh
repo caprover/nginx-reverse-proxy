@@ -8,8 +8,14 @@ if [ "x$RESOLVERS" = "x" ]; then
     exit 1
 fi
 
+export NGINX_RESOLVER_IPV6="${NGINX_RESOLVER_IPV6:-off}"
+case "$NGINX_RESOLVER_IPV6" in
+    on|off) ;;
+    *) echo 'Error: NGINX_RESOLVER_IPV6 must be on or off' >&2; exit 1 ;;
+esac
+
 cp /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 
-envsubst '$RESOLVERS $UPSTREAM_HTTP_ADDRESS $CLIENT_MAX_BODY_SIZE' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '$RESOLVERS $UPSTREAM_HTTP_ADDRESS $CLIENT_MAX_BODY_SIZE $NGINX_RESOLVER_IPV6' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
 exec "$@"
