@@ -43,5 +43,8 @@ docker buildx use mybuilder
 
 IMAGE_NAME=caprover/nginx-reverse-proxy
 IMAGE_VERSION=1-$GIT_COMMIT_HASH
+if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+    IMAGE_VERSION="$IMAGE_VERSION-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+fi
 
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$IMAGE_VERSION -t $IMAGE_NAME:latest -f Dockerfile --push .
+docker buildx build --pull --platform linux/amd64,linux/arm64,linux/arm -t $IMAGE_NAME:$IMAGE_VERSION -t $IMAGE_NAME:latest -f Dockerfile --push .
